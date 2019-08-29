@@ -17,6 +17,8 @@ class LessonsController extends ApiController
     public function __construct(LessonTransformer $lessonsTransformer)
     {
         $this->lessonsTransformer = $lessonsTransformer;
+
+        $this->middleware('auth.basic')->only('store');
     }
 
 
@@ -25,7 +27,7 @@ class LessonsController extends ApiController
      */
     public function index()
     {
-        $lessons = Lesson::all();
+        $lessons = Lesson::latest()->get();
 
         return $this->respond([
             'data' => $this->lessonsTransformer->transformCollection($lessons)
@@ -47,5 +49,16 @@ class LessonsController extends ApiController
         return $this->respond([
             'data' => $this->lessonsTransformer->transform($lesson)
         ]);
+    }
+
+    public function store()
+    {
+        if (!request('title') || !request('body')) {
+            return $this->respondFailedValidation('Parameters failed validation for a lesson');
+        }
+
+        Lesson::create(request()->all());
+
+        return $this->respondCreated('Lesson created successfully');
     }
 }

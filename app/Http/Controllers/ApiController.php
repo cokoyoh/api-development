@@ -38,6 +38,29 @@ class ApiController extends Controller
     }
 
     /**
+     * @param $message
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function respondCreated($message)
+    {
+        return $this->setStatusCode(201)
+            ->respond(['message' => $message]);
+    }
+
+    /**
+     * @param $message
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function respondFailedValidation($message)
+    {
+        return $this->setStatusCode(422)
+            ->respond([
+                'message' => $message,
+                'status_code' => $this->getStatusCode()
+            ]);
+    }
+
+    /**
      * @param $data
      * @param array $headers
      * @return \Illuminate\Http\JsonResponse
