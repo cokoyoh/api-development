@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Acme\Transformers\LessonTransformer;
 use App\Lesson;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Http\JsonResponse;
 
-class LessonsController extends Controller
+class LessonsController extends ApiController
 {
     protected $lessonsTransformer;
 
@@ -21,35 +21,31 @@ class LessonsController extends Controller
 
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function index()
     {
         $lessons = Lesson::all();
 
-        return Response::json([
+        return $this->respond([
             'data' => $this->lessonsTransformer->transformCollection($lessons)
-        ], 200);
+        ]);
     }
 
     /**
      * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function show($id)
     {
         $lesson = Lesson::find($id);
 
         if(is_null($lesson)) {
-            return Response::json([
-                'error' => [
-                    'message' => 'lesson does not exit',
-                ]
-            ], 404);
+            return $this->respondNotFound('Lesson does not exist');
         }
 
-        return Response::json([
+        return $this->respond([
             'data' => $this->lessonsTransformer->transform($lesson)
-        ], 200);
+        ]);
     }
 }
