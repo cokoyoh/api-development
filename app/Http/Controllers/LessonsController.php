@@ -51,6 +51,9 @@ class LessonsController extends ApiController
         ]);
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function store()
     {
         if (!request('title') || !request('body')) {

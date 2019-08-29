@@ -5,8 +5,12 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     protected $seeders = [
-        LessonsTableSeeder::class
+        UsersTableSeeder::class,
+        LessonsTableSeeder::class,
+        TagTableSeeder::class,
+        LessonTagTableSeeder::class
     ];
+
     /**
      * Seed the application's database.
      *
@@ -14,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Lesson::truncate();
+//        \App\Lesson::truncate();
 
         collect($this->seeders)
             ->each(function ($seeder) {
